@@ -11,6 +11,8 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.openhft.affinity.AffinityStrategies;
+import net.openhft.affinity.AffinityThreadFactory;
 import org.apache.log4j.Level;
 import org.lizhiwei.lancer.api.*;
 import org.lizhiwei.lancer.config.Configuration;
@@ -18,16 +20,13 @@ import org.lizhiwei.lancer.config.Configuration;
 import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import org.apache.log4j.Logger;
 import org.lizhiwei.lancer.internal.handler.ConnectionMaintainHandler;
 import org.lizhiwei.lancer.util.InstanceBuilder;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -194,7 +193,26 @@ public class LancerImpl implements Lancer, LifeCycle {
     @Override
     public void create() {
 
-        NioEventLoopGroup workerGroup = new NioEventLoopGroup(cfg.getChildThreadNumber());
+
+
+       // NioEventLoopGroup workerGroup = new NioEventLoopGroup(cfg.getChildThreadNumber());
+
+        AffinityStrategies strategies = null;
+        if (cfg.getThreadAffinityStrategy() != null) {
+            try {
+                strategies =  AffinityStrategies.valueOf(cfg.getThreadAffinityStrategy());
+            }catch (Exception e){
+               logger.error("illegal threadAffinityStrategy, ignore threadAffinityStrategy");
+            }
+        }
+
+        EventLoopGroup workerGroup = null;
+        if (strategies != null) {
+            ThreadFactory threadFactory = new AffinityThreadFactory("atf_wrk", strategies);
+            workerGroup = new NioEventLoopGroup(cfg.getChildThreadNumber(), threadFactory);
+        } else {
+            workerGroup = new NioEventLoopGroup(cfg.getChildThreadNumber());
+        }
 
         codecFactory = InstanceBuilder.buildInstance(cfg.getCodecFactory());
 

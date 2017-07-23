@@ -1,6 +1,7 @@
 channelOptions:
    SO_KEEPALIVE: true
    TCP_NODELAY: true
+threadAffinityStrategy : DIFFERENT_CORE
 childThreadNumber: 16
 codecFactory: org.lizhiwei.lancer.codec.LancerMessageCodecFactory
 handlers:

@@ -25,6 +25,10 @@ public class Configuration {
     private String codecFactory;
 
 
+
+
+    private String threadAffinityStrategy;
+
     private Map<String,Integer> charsets = new HashMap<String,Integer>();
 
 
@@ -40,6 +44,17 @@ public class Configuration {
     }
 
 
+    /**
+     * possible candidates : DIFFERENT_CORE, DIFFERENT_SOCKET,SAME_SOCKET,SAME_CORE,ANY
+     * @return
+     */
+    public String getThreadAffinityStrategy() {
+        return threadAffinityStrategy;
+    }
+
+    public void setThreadAffinityStrategy(String threadAffinityStrategy) {
+        this.threadAffinityStrategy = threadAffinityStrategy;
+    }
 
     public Protocol getProtocol() {
         return protocol;
