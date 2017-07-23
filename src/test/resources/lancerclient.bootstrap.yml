@@ -1,0 +1,11 @@
+channelOptions:
+   SO_KEEPALIVE: true
+   TCP_NODELAY: true
+childThreadNumber: 16
+handlers:
+- 'org.lizhiwei.lancer.handler.SimpleEncoder'
+- 'io.netty.handler.logging.LoggingHandler'
+- 'org.lizhiwei.lancer.handler.SimpleTextSender'
+host: localhost
+mode: CLIENT
+protocol: TCP

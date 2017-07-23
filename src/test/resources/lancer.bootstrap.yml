@@ -1,0 +1,12 @@
+channelOptions:
+   SO_KEEPALIVE: true
+   TCP_NODELAY: true
+childThreadNumber: 16
+handlers:
+- 'io.netty.handler.logging.LoggingHandler'
+
+host: localhost
+mode: SERVER
+parentThreadNumber: 8
+port: 8199
+protocol: TCP

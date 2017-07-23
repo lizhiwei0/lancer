@@ -1,0 +1,13 @@
+channelOptions:
+   SO_KEEPALIVE: true
+   TCP_NODELAY: true
+childThreadNumber: 16
+codecFactory: org.lizhiwei.lancer.codec.LancerMessageCodecFactory
+handlers:
+- 'io.netty.handler.logging.LoggingHandler'
+- 'org.lizhiwei.lancer.handler.WaterMelonSender'
+host: localhost
+mode: SERVER
+parentThreadNumber: 8
+port: 8198
+protocol: TCP
